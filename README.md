@@ -1,4 +1,4 @@
-<h1>Прокт YaMDb собирает отзывы пользователей на различные произведения.<h1>
+<h1>Проект YaMDb собирает отзывы пользователей на различные произведения.<h1>
 
 <h2>
 Проект YaMDb собирает отзывы пользователей на произведения. Сами произведения в YaMDb не хранятся, здесь нельзя посмотреть фильм или послушать музыку.
@@ -20,51 +20,48 @@
 Клонировать репозиторий и перейти в него в командной строке:
 
 ```
-git clone git@github.com:timurmuginov/api_yamdb.git
+git clone https://github.com/mishatar/api_yamdb.git
 ```
 
 ```
 cd api_yamdb
 ```
 
-Cоздать и активировать виртуальное окружение:
-
+Перейти в папку infra и запустить docker-compose.yaml
+(при установленном и запущенном Docker)
 ```
-python3 -m venv env
-```
-
-* Если у вас Linux/macOS
-
-    ```
-    source env/bin/activate
-    ```
-
-* Если у вас windows
-
-    ```
-    source env/scripts/activate
-    ```
-
-```
-python3 -m pip install --upgrade pip
+cd api_yamdb/infra
+docker-compose up
 ```
 
-Установить зависимости из файла requirements.txt:
-
+Для пересборки контейнеров выполнять команду:
+(находясь в папке infra, при запущенном Docker)
 ```
-pip install -r requirements.txt
-```
-
-Выполнить миграции:
-
-```
-python3 manage.py migrate
+docker-compose up -d --build
 ```
 
-Запустить проект:
+В контейнере web выполнить миграции:
 
 ```
-python3 manage.py runserver
+docker-compose exec web python manage.py migrate
+```
+
+Создать суперпользователя:
+
+```
+docker-compose exec web python manage.py createsuperuser
+```
+
+Собрать статику:
+
+```
+docker-compose exec web python manage.py collectstatic --no-input
+```
+
+Проверьте работоспособность приложения, для этого перейдите на страницу:
+
+```
+ http://localhost/admin/
 ```
 
 ### Запуск импорта
